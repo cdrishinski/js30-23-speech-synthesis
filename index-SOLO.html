@@ -13,8 +13,8 @@
     <div class="voiceinator">
 
         <h1>The Voiceinator 5000</h1>
-        <input type="checkbox" name="es" value="spanish" checked> Spanish
-        <input type="checkbox" name="en" value="english" checked> English
+        <input class="checkbox" type="checkbox" name="es" value="es" checked> Spanish
+        <input class="checkbox" type="checkbox" name="en" value="en" checked> English
         <br>
 
         <select name="voice" id="voices">
@@ -40,24 +40,27 @@
         const options = document.querySelectorAll('[type="range"], [name="text"]');
         const speakButton = document.querySelector('#speak');
         const stopButton = document.querySelector('#stop');
-        let langOptions = [...document.querySelectorAll('[type="checkbox"]')]
-        
-         let newLangOptions = langOptions
-            .map(lang => {
-                if(lang.checked){
-                    langOptions.push(lang)
-                }
-            })
-            
-           console.log(newLangOptions) 
 
-    
+        let langOptions = document.querySelectorAll('.checkbox:checked')
+        let newLangOptions = [...langOptions]
+
+        console.log(newLangOptions)
+
+        function filterLangOptions() {
+            let filterLangOptions = newLangOptions
+                .map(lang => {
+                    if (lang.checked) {
+                        console.log(JSON.stringify(lang.value))
+                        JSON.stringify(lang.value)
+                    }
+                })
+        }
 
         function populateVoices() {
             voices = speechSynthesis.getVoices();
 
             voicesDropdown.innerHTML = voices
-                .filter(voice => voice.lang.includes(`en`))
+                .filter(voice => voice.lang.includes(`${filterLangOptions[0]}, ${filterLangOptions[1]}`))
                 .map(voice => `<option value="${voice.name}">${voice.name}${voice.lang}</option>`)
                 .join('')
         }
@@ -78,11 +81,11 @@
         }
 
 
-        options.forEach(option => option.addEventListener('change', updateSpeech))
+        options.forEach(option => option.addEventListener('change', updateSpeech, filterLangOptions))
         speechSynthesis.addEventListener('voiceschanged', populateVoices);
         speakButton.addEventListener('click', toggle)
         stopButton.addEventListener('click', () => toggle(false))
-
+        langOptions.forEach(lang => lang.addEventListener('change', filterLangOptions))
 
 
     </script>
