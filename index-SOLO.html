@@ -41,17 +41,11 @@
         const speakButton = document.querySelector('#speak');
         const stopButton = document.querySelector('#stop');
         let langSelectedNodeList = document.querySelectorAll('[class="checkbox"]')
-        let langSelectedObj = [...langSelectedNodeList]
 
         let langArr = []
 
-        for( let lang in langSelectedObj) {
-            console.log(lang)
-              // if( lang.checked){
-            //     langArr.push( lang.value )
-            // }
-        }
-        // console.log(langArr)
+        langSelectedNodeList.forEach(lang => langArr.push(lang.value))
+
 
         function populateVoices() {
             voices = speechSynthesis.getVoices();
@@ -77,8 +71,14 @@
 
         }
 
+        function setVoice (){
+
+      msg.voice = voices.find(voice => voice.name === this.value);
+        }
+
 
         options.forEach(option => option.addEventListener('change', updateSpeech))
+        voicesDropdown.addEventListener('change', setVoice)
         speechSynthesis.addEventListener('voiceschanged', populateVoices);
         speakButton.addEventListener('click', toggle)
         stopButton.addEventListener('click', () => toggle(false))
