@@ -14,7 +14,7 @@
 
         <h1>Talk4Me</h1>
         <input class="checkbox" type="checkbox" name="es" value="es" checked> Spanish
-        <input class="checkbox" type="checkbox" name="en" value="en" checked> English
+        <input class="checkbox" type="checkbox" name="en" value="en"> English
         <br>
 
         <select name="voice" id="voices">
@@ -44,14 +44,19 @@
 
         let langArr = []
 
-        langSelectedNodeList.forEach(lang => langArr.push(lang.value))
+        langSelectedNodeList.forEach(lang => 
+           { if(lang.checked){
+                langArr.push(lang.value)
+            }
+           })
+               
 
 
         function populateVoices() {
             voices = speechSynthesis.getVoices();
 
             voicesDropdown.innerHTML = voices
-                .filter(voice => voice.lang.includes(`en`))
+                .filter(voice => voice.lang.includes(`${langArr}`))
                 .map(voice => `<option value="${voice.name}">${voice.name}${voice.lang}</option>`)
                 .join('')
         }
