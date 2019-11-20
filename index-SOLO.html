@@ -53,25 +53,28 @@
                 }
             })
             console.log(langArr)
-         populateVoices();
-         setVoice();
+            populateVoices();
+            setVoice();
         }
 
         function populateVoices() {
             voices = speechSynthesis.getVoices();
-            
+
             voicesDropdown.innerHTML = voices
                 .filter(voice => voice.lang.includes(`${langArr}`))
                 .map(voice => `<option value="${voice.name}">${voice.name}${voice.lang}</option>`)
                 .join('')
+
+            setVoice()
         }
 
-
+        // updates the message that is spoken
         function updateSpeech() {
             msg[this.name] = this.value;
             toggle();
         }
 
+        //restarts speech if any  buttons are pushed
         function toggle(startOver = true) {
             speechSynthesis.cancel()
             if (startOver) {
@@ -81,7 +84,6 @@
         }
 
         function setVoice() {
-
             msg.voice = voices.find(voice => voice.name === this.value);
         }
 
